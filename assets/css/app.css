@@ -1,0 +1,33 @@
+body {
+  margin: 0px;
+  padding: 0px;
+}
+
+.page {
+  width: 100vw;
+  height: 100vh;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.three-d-shadow {
+  box-shadow: 0px 8px 10px gray,-10px 8px 15px gray, 10px 8px 15px gray;
+}
+
+.guage {
+  display: grid;
+  grid-template-rows: 30% 70%;
+}
+
+.guage .title {
+  padding: 10px;
+  background-color: green;
+}
+
+.guage .content {
+  font-size: 50px;
+}

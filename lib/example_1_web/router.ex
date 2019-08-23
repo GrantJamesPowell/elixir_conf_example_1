@@ -18,6 +18,7 @@ defmodule Example1Web.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+    live "/part1", Part1Live
   end
 
   scope "/part1", Example1Web do
