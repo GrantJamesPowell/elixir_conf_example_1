@@ -18,9 +18,4 @@ defmodule Example1Web.Router do
 
     get "/", PageController, :index
   end
-
-  # Other scopes may use custom stacks.
-  # scope "/api", Example1Web do
-  #   pipe_through :api
-  # end
 end
