@@ -14,6 +14,11 @@ config :example_1, Example1Web.Endpoint,
   render_errors: [view: Example1Web.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Example1.PubSub, adapter: Phoenix.PubSub.PG2]
 
+config :example_1, Example1Web.Endpoint,
+   live_view: [
+     signing_salt: "SECRET_SALT"
+   ]
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
