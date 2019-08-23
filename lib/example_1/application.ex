@@ -3,6 +3,8 @@ defmodule Example1.Application do
   alias Example1.MockResource
 
   def start(_type, _args) do
+    :observer.start()
+
     children =
       [
         Example1Web.Endpoint,
@@ -18,4 +20,3 @@ defmodule Example1.Application do
     :ok
   end
 end
-
