@@ -18,4 +18,9 @@ defmodule Example1Web.Router do
 
     get "/", PageController, :index
   end
+
+  scope "/part1", Example1Web do
+    get "/async", Part1Controller, :async
+    get "/serial", Part1Controller, :serial
+  end
 end
