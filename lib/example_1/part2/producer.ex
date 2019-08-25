@@ -1,6 +1,11 @@
 defmodule Example1.Part2.Producer do
   use GenStage
 
+  def enqueue_event(event, producer \\ __MODULE__),
+    do: GenServer.cast(producer, {:enqueue, event})
+
+  def handle_cast({:enqueue, event}, state), do: {:noreply, [event], state}
+
   def start_link([]), do: start_link(name: __MODULE__)
   def start_link(name: name), do: GenStage.start_link(__MODULE__, %{}, name: name)
 

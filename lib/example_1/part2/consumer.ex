@@ -11,7 +11,11 @@ defmodule Example1.Part2.Consumer do
 
   def handle_events(events, _from, state) do
     me = Process.info(self())[:registered_name]
-    IO.inspect("Process: #{me} is handling events")
+
+    for event <- events do
+      IO.inspect("Process: #{me} is handling event #{event}")
+    end
+
     {:noreply, [], state}
   end
 end
