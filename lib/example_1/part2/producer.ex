@@ -6,5 +6,9 @@ defmodule Example1.Part2.Producer do
 
   def init(%{}), do: {:producer, :unused_init_state}
 
-  def handle_demand(demand, state), do: {:noreply, [], state}
+  def handle_demand(demand, state) do
+    me = Process.info(self())[:registered_name]
+    IO.inspect("Process: #{me}, recieved demand #{demand}")
+    {:noreply, [], state}
+  end
 end

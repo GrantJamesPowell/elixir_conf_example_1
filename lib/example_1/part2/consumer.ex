@@ -1,13 +1,17 @@
 defmodule Example1.Part2.Consumer do
   use GenStage
 
-  def start_link([]), do: start_link(name: __MODULE__)
-  def start_link(name: name), do: GenStage.start_link(__MODULE__, %{}, name: name)
+  def start_link(opts) do
+    name = opts[:name] || __MODULE__
+    subscribe_to = opts[:subscribe_to]
+    GenStage.start_link(__MODULE__, %{subscribe_to: subscribe_to}, name: name)
+  end
 
-  def init(%{}), do: {:consumer, :the_state_does_not_matter}
+  def init(%{subscribe_to: subs}), do: {:consumer, :the_state_does_not_matter, subscribe_to: subs}
 
   def handle_events(events, _from, state) do
-    IO.inspect(events)
+    me = Process.info(self())[:registered_name]
+    IO.inspect("Process: #{me} is handling events")
     {:noreply, [], state}
   end
 end

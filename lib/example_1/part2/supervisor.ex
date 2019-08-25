@@ -8,7 +8,7 @@ defmodule Example1.Part2.Supervisor do
   def init(_init_arg) do
     children = [
       Producer,
-      Consumer
+      {Consumer, subscribe_to: [Producer]}
     ]
 
     Supervisor.init(children, strategy: :one_for_one)
