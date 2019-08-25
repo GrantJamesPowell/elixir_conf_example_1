@@ -24,7 +24,7 @@ defmodule Example1Web.Part1Live do
   def put_count(socket) do
     samples = (socket.assigns[:samples] || []) |> Enum.take(10)
     samples = [MockResource.current_requests(Part1) | samples]
-    average = Enum.sum(samples) / length(samples) |> Float.round(2)
+    average = (Enum.sum(samples) / length(samples)) |> Float.round(2)
     assign(socket, average: average, samples: samples)
   end
 end
