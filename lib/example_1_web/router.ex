@@ -25,4 +25,9 @@ defmodule Example1Web.Router do
     get "/async", Part1Controller, :async
     get "/serial", Part1Controller, :serial
   end
+
+  scope "/part2", Example1Web do
+    get "/single_consumer_genstage", Part2Controller, :single_consumer_genstage
+    get "/multi_consumer_genstage", Part2Controller, :multi_consumer_genstage
+  end
 end

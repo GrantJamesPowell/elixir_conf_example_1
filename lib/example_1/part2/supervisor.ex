@@ -21,7 +21,7 @@ defmodule Example1.Part2.Supervisor do
       child_spec({Producer, name: MCP}, id: MCP),
       child_spec({Consumer, name: C1, subscribe_to: [MCP]}, id: C1),
       child_spec({Consumer, name: C2, subscribe_to: [MCP]}, id: C2),
-      child_spec({Consumer, name: C3, subscribe_to: [MCP]}, id: C3)
+      child_spec({Consumer, name: C3, subscribe_to: [MCP]}, id: C3),
     ]
 
     Supervisor.init(children, strategy: :one_for_one)
