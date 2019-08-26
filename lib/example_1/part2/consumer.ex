@@ -2,6 +2,7 @@ defmodule Example1.Part2.Consumer do
   use GenStage
   require Logger
   alias Example1.MockResource
+  alias Example1Web.Endpoint
 
   def start_link(opts) do
     name = opts[:name] || __MODULE__
@@ -14,12 +15,15 @@ defmodule Example1.Part2.Consumer do
     do: {:consumer, %{resource: resource}, subscribe_to: subs}
 
   def handle_events(events, _from, %{resource: resource} = state) do
-    me = Process.info(self())[:registered_name]
-
-    Logger.info("Process: #{me} is handling #{length(events)} events")
-
-    for _event <- events do
+    for %{event_occurred_at: start_time} <- events do
       :ok = MockResource.use_resource(resource)
+
+      time =
+        (System.monotonic_time() - start_time)
+        |> System.convert_time_unit(:native, :millisecond)
+
+      Endpoint.broadcast!("genstage_processing_times", "processing_time", %{time: time})
+      Counter.decrement(EventsInSystem)
     end
 
     {:noreply, [], state}

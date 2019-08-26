@@ -19,6 +19,7 @@ defmodule Example1Web.Router do
 
     get "/", PageController, :index
     live "/part1", Part1Live
+    live "/part2", Part2Live
   end
 
   scope "/part1", Example1Web do
