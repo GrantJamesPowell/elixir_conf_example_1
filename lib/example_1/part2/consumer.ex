@@ -11,8 +11,11 @@ defmodule Example1.Part2.Consumer do
     GenStage.start_link(__MODULE__, %{subscribe_to: subscribe_to, resource: resource}, name: name)
   end
 
-  def init(%{subscribe_to: subs, resource: resource}),
-    do: {:consumer, %{resource: resource}, subscribe_to: subs}
+  def init(opts) do
+    resource = opts[:resource] || MockResource
+    subs = opts[:subscribe_to]
+    {:consumer, %{resource: resource}, subscribe_to: subs}
+  end
 
   def handle_events(events, _from, %{resource: resource} = state) do
     for %{event_occurred_at: start_time} <- events do

@@ -55,7 +55,7 @@ defmodule Example1Web.Part2Live do
 
   def put_count(socket) do
     resource_samples = socket.assigns[:resource_samples] |> Enum.take(10)
-    resource_samples = [MockResource.current_requests(Part2) | resource_samples]
+    resource_samples = [MockResource.current_requests() | resource_samples]
 
     assign(socket,
       queue_depth: Counter.value(EventsInSystem),

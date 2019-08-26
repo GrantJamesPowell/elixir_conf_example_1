@@ -8,7 +8,8 @@ defmodule Example1.Application do
     children = [
       Example1Web.Endpoint,
       Example1.Part2.Supervisor,
-      {MockResource, name: Part1}
+      MockResource,
+      {Counter, name: EventsInSystem}
     ]
 
     opts = [strategy: :one_for_one, name: Example1.Supervisor]
