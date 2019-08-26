@@ -42,7 +42,7 @@ defmodule Example1Web.Part2Live do
         %{event: "processing_time", topic: "genstage_processing_times", payload: %{time: time}},
         socket
       ) do
-    processing_time_samples = [time | Enum.take(socket.assigns[:processing_time_samples], 10)]
+    processing_time_samples = [time | socket.assigns[:processing_time_samples]]
 
     {:noreply,
      assign(socket,
