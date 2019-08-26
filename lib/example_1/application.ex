@@ -5,11 +5,11 @@ defmodule Example1.Application do
   def start(_type, _args) do
     :observer.start()
 
-    children =
-      [
-        Example1Web.Endpoint,
-        {MockResource, name: Part1}
-      ]
+    children = [
+      Example1Web.Endpoint,
+      Example1.Part2.Supervisor,
+      {MockResource, name: Part1}
+    ]
 
     opts = [strategy: :one_for_one, name: Example1.Supervisor]
     Supervisor.start_link(children, opts)

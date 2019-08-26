@@ -19,10 +19,15 @@ defmodule Example1Web.Router do
 
     get "/", PageController, :index
     live "/part1", Part1Live
+    live "/part2", Part2Live
   end
 
   scope "/part1", Example1Web do
     get "/async", Part1Controller, :async
     get "/serial", Part1Controller, :serial
+  end
+
+  scope "/part2", Example1Web do
+    get "/genstage", Part2Controller, :genstage
   end
 end
