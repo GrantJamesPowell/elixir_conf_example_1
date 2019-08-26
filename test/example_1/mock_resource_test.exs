@@ -19,9 +19,9 @@ defmodule Example1.MockResourceTest do
   test "using the resource from another process will cause count to go up", %{name: name} do
     assert 0 == MockResource.current_requests(name)
     Task.async(fn -> MockResource.use_resource(name) end)
-    Process.sleep(10)
+    Process.sleep(50)
     assert 1 == MockResource.current_requests(name)
-    Process.sleep(100)
+    Process.sleep(500)
     assert 0 == MockResource.current_requests(name)
   end
 end

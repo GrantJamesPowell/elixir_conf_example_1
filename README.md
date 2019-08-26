@@ -17,7 +17,6 @@ In another case, the work will be done asynchronously and the request will not w
 Open the `MockResource` module found [here](/lib/example1/mock_resource)
   * What is the `use_resource` function doing?
   * What is the `current_requests` function doing?
-  * Please adjust the `MockResource` to take 5x longer than it does right now
   * Where is an instance of `MockResource` being started in the supervision tree? Can you find it using the `:observer`
   * What are some examples of compute resources that `MockResource` models well? What are some compute resources that `MockResource` does not model well?
 

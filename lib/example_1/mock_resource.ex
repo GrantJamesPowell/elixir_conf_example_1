@@ -3,7 +3,7 @@ defmodule Example1.MockResource do
 
   def use_resource(resource \\ __MODULE__) do
     Agent.update(resource, &(&1 + 1))
-    Process.sleep(100)
+    Process.sleep(500)
     Agent.update(resource, &(&1 - 1))
   end
 

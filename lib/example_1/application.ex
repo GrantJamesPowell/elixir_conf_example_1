@@ -3,7 +3,9 @@ defmodule Example1.Application do
   alias Example1.MockResource
 
   def start(_type, _args) do
-    :observer.start()
+    unless Mix.env() == :test do
+      :observer.start()
+    end
 
     children = [
       Example1Web.Endpoint,
