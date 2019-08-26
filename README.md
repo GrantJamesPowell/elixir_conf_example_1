@@ -1,77 +1,106 @@
-# Elixir Conf 2019 - Building Scalable Real-time Systems in Elixir - Example 1
+# Building Scalable Real-time Systems in Elixir - Section 1 Example
 
-## Getting Started
+# Getting Setup
+  * Install dependencies with `mix deps.get`
+  * Install Node.js dependencies with `npm --prefix assets install`
+  * Start Phoenix endpoint with `iex -S mix phx.server`
+  * Now you can visit localhost:4000 from your browser.
 
-### Installing Elixir
+## Section 1 Part 1
 
-#### Linux/Mac
+We want you to see the effects of serialism and parallelism in Elixir. We have coded a small app which will process
+some work and respond to a request. In one case, the work will be done serially and in the same process as the request.
+In another case, the work will be done asynchronously and the request will not wait for the work to be performed.
 
-Clone this repository locally
-```
-git clone git@github.com:GrantJamesPowell/elixir_conf_example_1.git
-```
+## 1. Understanding IO wait, What is `MockResource` Doing in Each Endpoint
 
-Install Elixir
+Open the `MockResource` module found [here](/lib/example1/mock_resource)
+  * What is it doing?
+  * Please adjust the `MockResource` to take 5x longer than it does right now
+  * What are some examples of compute resources that `MockResource` models well? What are some compute resources that `MockResource` does not model well?
 
-1. Install the asdf tool version manager (highly highly recommend this tool, I use it for elixir, Erlang, ruby, and nodejs but today we'll be using it for elixir/erlang)
-https://asdf-vm.com/#/core-manage-asdf-vm
+How is the `MockResource` being used in the `/part1/serial` endpoint? How is it being used in the `/part1/async` endpoint?
 
-2. Install the elixir plugin
-```
-asdf plugin-add elixir https://github.com/asdf-vm/asdf-elixir.git
-```
+Find the LiveView [code](/lib/example_1_web/controllers/live/part_1_live.ex) for the `/part1` page
+  * What is it measuring?
 
-3. Install the Erlang plugin
-```
-asdf plugin-add erlang https://github.com/asdf-vm/asdf-erlang.git
-```
+## 2. Using `ab` (A.K.A ApacheBench)
 
-4. Install the nodejs plugin
-```
-asdf plugin-add nodejs https://github.com/asdf-vm/asdf-nodejs.git
-bash ~/.asdf/plugins/nodejs/bin/import-release-team-keyring
-```
+Apache Bench is a tool from the Apache foundation to load test HTTP servers. [docs](https://httpd.apache.org/docs/2.4/programs/ab.html)
 
-5. Run `asdf install` in this directory to install the dependencies of this file
-
-6. Run `mix deps.get` to install elixir dependencies
-
-7. Run `npm install --prefix assets` to install js dependencies
-
-8. Install ApacheBench (`ab`)
-
-## Part 1
-
-### Goal
-
-We want you to see the effects of serial and parallelism in Elixir. We have coded a small app which will process
-some work and respond to the request. In one case, the work will be done serially—in the same process as the request.
-In another case, the work will be done asynchronously—the request will not wait for it.
-
-You should observe what happens to the system between the two cases. With Observer started, what effect do the requests
-have on memory and schedulers? How is the process count affected as you run the requests?
-
-### Process
-
-1. Start your server with `mix phx.server`
-2. Navigate to `http://localhost:4000/part1`
-3. Run the serial request processor and evaluate questions
+After you've understood the runtime characteristics of the `part1/sync` and `part2/async` endpoints, guess at the results of the following benchmarks and then test your assumptions
+  * 3000 requests using a concurrency of 50 against `part1/serial`
+  * 3000 requests using a concurrency of 50 against `part1/async`
 
 ```
 ab -n 3000 -c 50 http://127.0.0.1:4000/part1/serial
 ```
 
-4. Run the async request processor and evaluate questions
-
 ```
 ab -n 3000 -c 50 http://127.0.0.1:4000/part1/async
 ```
 
-### Questions
+## 3.) Looking at concurrent requests to `MockResource` during your benchmarks
 
-* How is the memory affected during the requests?
-* How are the schedulers affected during the requests?
-* Were the requests fast, slow?
-* What are the limitations of this type of request? (async vs serial)
+The number of concurrent requests can be found at `http://localhost:4000/part1`
 
-## Part 2
+Make a hypothesis about the number of concurrent requests to mock resources for each of the following benchmarks, then test your hypothesis
+  * 3000 requests using a concurrency of 50 against `part1/serial`
+  * 3000 requests using a concurrency of 50 against `part1/async`
+
+What are the implications of the data you collected in these tests?
+  * From the web client's perspective, which endpoint is faster?
+  * What would happen is MockResource was your database? What if `MockResource` was a resource that could only handle limited load?
+
+## Section 1 Part 2
+
+In this section we will be exploring building a data pipeline using GenStage
+
+### 1.) Find the Genstage Components
+
+Follow the supervision tree from your main [application supervisor](/lib/example_1/application.ex) `applciation.ex`, and locate the genstage components running in your process tree. Once you've found the code for the component, locate the processes running in the `:observer`
+
+### 2.) Examine the GenStage
+
+Starting with the part2 [controller](/lib/example_1_web/controllers/part_2_controller.ex), trace your way through the gen stage pipeline.
+  * What is the controller doing?
+  * What is the producer doing?
+  * What is the consumer doing?
+
+Take a look at the code for the control panel for part 2 `/lib/example_1_web/controllers/part_2_controller.ex`
+  * What is it doing?
+  * What metrics is it collecting?
+
+### 3.) Enqueue some events
+
+Navigate to the `localhost:4000/part2`.
+
+Predict the answers to the following questions, then verify your assumptions using the apache bench tool with 1000 requests to the `/part2/genstage` endpoint
+  * How will the number of unprocessed events in the system change over time?
+  * How will the `MockResource` usage change with the number of events?
+
+```
+ab -n 1000 -c 50 http://127.0.0.1:4000/part2/genstag
+```
+
+### 4.) Increase the number of consumers to 3
+
+How will adding 2 more consumers to the system change the following values?
+  * How will the speed of processing events change?
+  * How will the `MockResource` usage change?
+
+Add 2 more consumers to the system and then Verify your assumptions using `ab` and the dashboard at `localhost:4000/part2`
+
+### 5.) Measure the latency of events flowing through your pipeline
+
+Use the event the consumer is emitting in order to measure the latency of the events in the system
+
+Answer the following questions
+  * How does the latency each event experience change as the depth of the queue changes?
+  * How does adding multiple consumers affect the average latency? (Its trickier than you'd think)
+
+### 6.) (Hard Mode) Consumer Supervisor
+
+Read the [docs](https://hexdocs.pm/gen_stage/ConsumerSupervisor.html) for consumer supervisor
+
+Implement the genstage consumers as a consumer supervisor with a concurrency that can be controlled via the `config/config.exs`
