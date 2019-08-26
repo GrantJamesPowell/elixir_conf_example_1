@@ -9,9 +9,9 @@ defmodule Example1.Part2.Supervisor do
   def init(_init_arg) do
     children = [
       Producer,
-      child_spec({Consumer, name: C1, subscribe_to: [Producer]}, id: C1),
-      child_spec({Consumer, name: C2, subscribe_to: [Producer]}, id: C2),
-      child_spec({Consumer, name: C3, subscribe_to: [Producer]}, id: C3)
+      child_spec({Consumer, name: Consumer1, subscribe_to: [Producer]}, id: Consumer1),
+      child_spec({Consumer, name: Consumer2, subscribe_to: [Producer]}, id: Consumer2),
+      child_spec({Consumer, name: Consumer3, subscribe_to: [Producer]}, id: Consumer3)
     ]
 
     Supervisor.init(children, strategy: :one_for_one)
