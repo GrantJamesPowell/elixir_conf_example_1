@@ -51,6 +51,7 @@ body {
   height: 400px;
   text-decoration: none;
   background: linear-gradient(to bottom, #2C5364, #203A43, #0F2027);
+  border-radius: 50px;
 }
 
 .flex-column {
