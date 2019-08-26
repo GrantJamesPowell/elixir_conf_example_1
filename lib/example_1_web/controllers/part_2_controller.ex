@@ -1,7 +1,5 @@
 defmodule Example1Web.Part2Controller do
   use Example1Web, :controller
-  alias Example1.MockResource
-
   alias Example1.Part2.Producer
 
   def genstage(conn, _params) do
