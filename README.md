@@ -12,7 +12,9 @@ In this section we will be exploring building a data pipeline using GenStage
 
 ### 1.) Find the Genstage Components
 
-Follow the supervision tree from your main [application supervisor](/lib/example_1/application.ex) `applciation.ex`, and locate the genstage components running in your process tree. Once you've found the code for the component, locate the processes running in the `:observer`
+Follow the supervision tree from your main [application supervisor](/lib/example_1/application.ex) `application.ex`, and
+locate the GenStage components running in your process tree. Once you've found the code for the component, locate the
+processes running in the `:observer`
 
 ### 2.) Examine the GenStage
 
@@ -34,7 +36,7 @@ Predict the answers to the following questions, then verify your assumptions usi
   * How will the `MockResource` usage change with the number of events?
 
 ```
-ab -n 1000 -c 50 http://127.0.0.1:4000/part2/genstage
+ab -k -n 1000 -c 50 http://127.0.0.1:4000/part2/genstage
 ```
 
 ### 4.) Increase the number of consumers to 3
@@ -47,9 +49,10 @@ Add 2 more consumers to the system and then Verify your assumptions using `ab` a
 
 ### 5.) Measure the latency of events flowing through your pipeline
 
-Use the event the consumer is emitting in order to measure the latency of the events in the system
+The LiveView currently measures the latency of events through the system.
 
-Answer the following questions
+Answer the following questions:
+
   * How does the latency each event experience change as the depth of the queue changes?
   * How does adding multiple consumers affect the average latency? (Its trickier than you'd think)
 
@@ -57,4 +60,4 @@ Answer the following questions
 
 Read the [docs](https://hexdocs.pm/gen_stage/ConsumerSupervisor.html) for consumer supervisor
 
-Implement the genstage consumers as a consumer supervisor with a concurrency that can be controlled via the `config/config.exs`
+Implement the GenStage consumers as a consumer supervisor with a concurrency that can be controlled via the `config/config.exs`
