@@ -8,13 +8,13 @@
 
 ## Section 1 Part 1
 
-We want you to see the effects of serialism and parallelism in Elixir. We have coded a small app which will process
-some work and respond to a request. In one case, the work will be done serially and in the same process as the request.
+We want you to see the effects of serialism and parallelism in Elixir. We have coded a small app that will process
+some work and respond to a request. In one case, the work will be done serially, in the same process as the request.
 In another case, the work will be done asynchronously and the request will not wait for the work to be performed.
 
 ## 1. Understanding IO wait, What is `MockResource` Doing in Each Endpoint
 
-Open the `MockResource` module found [here](/lib/example1/mock_resource)
+Open the `MockResource` module found in `lib/example1/mock_resource`
   * What is the `use_resource` function doing?
   * What is the `current_requests` function doing?
   * Where is an instance of `MockResource` being started in the supervision tree? Can you find it using the `:observer`
@@ -36,11 +36,11 @@ After you've understood the runtime characteristics of the `part1/sync` and `par
 How long did each request take? Which endpoint returned to the client the fastest? What is the implication on memory and cpu usage, can you see these in the `:observer` screens?
 
 ```
-ab -n 3000 -c 50 http://127.0.0.1:4000/part1/serial
+ab -k -n 3000 -c 50 http://127.0.0.1:4000/part1/serial
 ```
 
 ```
-ab -n 3000 -c 50 http://127.0.0.1:4000/part1/async
+ab -k -n 3000 -c 50 http://127.0.0.1:4000/part1/async
 ```
 
 ## 3.) Looking at concurrent requests to `MockResource` during your benchmarks
