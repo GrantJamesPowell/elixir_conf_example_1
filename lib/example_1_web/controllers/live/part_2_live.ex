@@ -26,7 +26,10 @@ defmodule Example1Web.Part2Live do
 
   def mount(_session, socket) do
     :timer.send_interval(20, self(), :tick)
-    Endpoint.subscribe("genstage_processing_times")
+
+    if connected?(socket) do
+      Endpoint.subscribe("genstage_processing_times")
+    end
 
     socket =
       assign(socket, %{
